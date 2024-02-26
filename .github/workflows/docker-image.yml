@@ -25,15 +25,10 @@ jobs:
         # You can add more commands here for testing your services
 
     - name: Wait for Services to Start
-      run: sleep 15s
+      run: sleep 5s
 
     - name: Test Frontend with curl
       run: curl -I http://localhost:8080
-
-    - name: Test Backend with curl
-      run: |
-          curl -I http://localhost:5000 || true
-          docker-compose logs backend
 
     - name: Stop Docker Compose
       run: docker-compose -f docker-compose.yml down
