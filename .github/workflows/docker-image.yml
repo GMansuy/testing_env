@@ -1,11 +1,33 @@
-name: Docker Compose Actions Workflow
-on: push
+name: Docker Compose Test
+
+on:
+  push:
+    branches:
+      - main 
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:19.03.12
+        options: --privileged 
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Build the stack
-        run: docker-compose up -d
-      - name: Test
-        run: docker run --network container:webapp-frontend appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8080/
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and run Docker Compose
+      run: |
+        docker-compose -f docker-compose.yml up -d
+        docker-compose -f docker-compose.yml ps  # Display running containers for verification
+        # You can add more commands here for testing your services
+
+    - name: Test your services
+      run: |
+        # Add your testing commands here
+        # For example, you can use curl to check if your services are responding
+
+    - name: Stop Docker Compose
+      run: docker-compose -f docker-compose.yml down
