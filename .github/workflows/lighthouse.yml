@@ -9,4 +9,4 @@ jobs:
         with:
           node-version: 18
       - run: npm install -g @lhci/cli@0.13.x
-      - run: lhci autorun --collect.staticDistDir
+      - run: lhci autorun --collect.staticDistDir="./front-react"
