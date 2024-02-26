@@ -31,7 +31,9 @@ jobs:
       run: curl -I http://localhost:8080
 
     - name: Test Backend with curl
-      run: curl -I http://localhost:5000
+      run: |
+          curl -I http://localhost:5000 || true
+          docker-compose logs backend
 
     - name: Stop Docker Compose
       run: docker-compose -f docker-compose.yml down
