@@ -16,6 +16,11 @@ services:
       POSTGRES_DB : nest
     networks:
       - green_app
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -q -d nest -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   frontend:
     build: front-react
@@ -36,7 +41,8 @@ services:
     networks:
       - green_app
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     hostname: back-nest
     command: bash -c "npx prisma migrate deploy ;
              npm run start"
