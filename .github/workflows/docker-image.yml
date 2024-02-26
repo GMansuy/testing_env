@@ -24,10 +24,14 @@ jobs:
         docker-compose -f docker-compose.yml ps  # Display running containers for verification
         # You can add more commands here for testing your services
 
-    - name: Test your services
-      run: |
-        # Add your testing commands here
-        # For example, you can use curl to check if your services are responding
+    - name: Wait for Services to Start
+      run: sleep 30s  # Adjust sleep time as needed
+
+    - name: Test Frontend with curl
+      run: curl -I http://localhost:8080
+
+    - name: Test Backend with curl
+      run: curl -I http://localhost:5000/message
 
     - name: Stop Docker Compose
       run: docker-compose -f docker-compose.yml down
