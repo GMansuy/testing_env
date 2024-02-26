@@ -25,7 +25,7 @@ jobs:
         # You can add more commands here for testing your services
 
     - name: Wait for Services to Start
-      run: sleep 30s  # Adjust sleep time as needed
+      run: sleep 40s
 
     - name: Test Frontend with curl
       run: curl -I http://localhost:8080
