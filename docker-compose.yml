@@ -1,48 +1,33 @@
-version: '3.9'
+name: Docker Compose Test
 
-networks:
-  green_app:
-    driver: bridge
+on:
+  push:
+    branches:
+      - main
 
-services:
-  database:
-    image: postgres:13
-    container_name: postgres
-    ports:
-      - 5434:5432
-    environment:
-      POSTGRES_USER : postgres
-      POSTGRES_PASSWORD : 123
-      POSTGRES_DB : nest
-    networks:
-      - green_app
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -q -d nest -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-  frontend:
-    build: front-react
-    container_name: front-react
-    restart: always
-    ports:
-      - "8080:8080"
-    networks:
-      - green_app
-    hostname: front-react
+    services:
+      docker:
+        image: docker:19.03.12
+        options: --privileged
 
-  backend:
-    build: back-nest
-    container_name: back-nest
-    restart: always
-    ports:
-      - "5000:5000"
-    networks:
-      - green_app
-    depends_on:
-      database:
-        condition: service_healthy
-    hostname: back-nest
-    command: bash -c "npx prisma migrate deploy ;
-             npm run start"
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and run Docker Compose
+      run: |
+        docker-compose -f docker-compose.yml up -d
+        docker-compose -f docker-compose.yml ps  # Display running containers for verification
+        # You can add more commands here for testing your services
+
+    - name: Test your services
+      run: |
+        # Add your testing commands here
+        # For example, you can use curl to check if your services are responding
+
+    - name: Stop Docker Compose
+      run: docker-compose -f docker-compose.yml down

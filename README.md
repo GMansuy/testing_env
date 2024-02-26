@@ -1,1 +1,1 @@
-Testing docker build ci
+Testing docker compose ci
