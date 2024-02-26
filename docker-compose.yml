@@ -1,0 +1,42 @@
+version: '3.9'
+
+networks:
+  green_app:
+    driver: bridge
+
+services:
+  database:
+    image: postgres:13
+    container_name: postgres
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER : postgres
+      POSTGRES_PASSWORD : 123
+      POSTGRES_DB : nest
+    networks:
+      - green_app
+
+  frontend:
+    build: front-react
+    container_name: front-react
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - green_app
+    hostname: front-react
+
+  backend:
+    build: back-nest
+    container_name: back-nest
+    restart: always
+    ports:
+      - "5000:5000"
+    networks:
+      - green_app
+    depends_on:
+      - database
+    hostname: back-nest
+    command: bash -c "npx prisma migrate deploy ;
+             npm run start"
