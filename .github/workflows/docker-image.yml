@@ -27,11 +27,11 @@ jobs:
     - name: Wait for Services to Start
       run: sleep 15s
 
-    - name: Test Backend with curl
-      run: curl -I http://localhost:5000
-
     - name: Test Frontend with curl
       run: curl -I http://localhost:8080
+
+    - name: Test Backend with curl
+      run: curl -I http://localhost:5000
 
     - name: Stop Docker Compose
       run: docker-compose -f docker-compose.yml down
