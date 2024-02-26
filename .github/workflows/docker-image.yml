@@ -28,7 +28,7 @@ jobs:
       run: sleep 15s
 
     - name: Test Backend with curl
-      run: curl -I http://localhost:5000/message
+      run: curl -I http://localhost:5000
 
     - name: Test Frontend with curl
       run: curl -I http://localhost:8080
